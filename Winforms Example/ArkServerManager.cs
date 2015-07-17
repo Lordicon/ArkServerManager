@@ -21,6 +21,8 @@ namespace Ark_Server_Manager
             Load += Form1_Load;
         }
 
+        String[,] rssData = null;
+
         void Form1_Load(object sender, EventArgs e)
         {
             Program.ArkRcon.Run();
@@ -37,6 +39,17 @@ namespace Ark_Server_Manager
                 {
                     label7.Text = address.ToString();
                 }
+            }
+
+            TitlesBox.Items.Clear();
+            rssData = getRssData(ChannelTextBox.Text);
+            for (int i = 0; i < rssData.GetLength(0); i++)
+            {
+                if (rssData[i, 0] != null)
+                {
+                    TitlesBox.Items.Add(rssData[i, 0]);
+                }
+                TitlesBox.SelectedIndex = 0;
             }
         }
 
@@ -73,7 +86,7 @@ namespace Ark_Server_Manager
                 Port = int.Parse(textBox2.Text),
                 Password = textBox3.Text
             };
-            await Program.ArkRcon.Connect(server);       
+            await Program.ArkRcon.Connect(server);
         }
 
         private async void button2_Click(object sender, EventArgs e)
@@ -102,6 +115,71 @@ namespace Ark_Server_Manager
             {
                 this.serverstatus.Image = Properties.Resources.offline;
             }
+        }
+
+        private String[,] getRssData(String channel)
+        {
+            System.Net.WebRequest myRequest = System.Net.WebRequest.Create(channel);
+            System.Net.WebResponse myResponse = myRequest.GetResponse();
+
+            System.IO.Stream rssStream = myResponse.GetResponseStream();
+            System.Xml.XmlDocument rssDoc = new System.Xml.XmlDocument();
+
+            rssDoc.Load(rssStream);
+
+            System.Xml.XmlNodeList rssItems = rssDoc.SelectNodes("rss/channel/item");
+
+            String[,] tempRssData = new String[100, 3];
+
+            for (int i = 0; i < rssItems.Count; i++)
+            {
+                System.Xml.XmlNode rssNode;
+
+                rssNode = rssItems.Item(i).SelectSingleNode("title");
+                if (rssNode != null)
+                {
+                    tempRssData[i, 0] = rssNode.InnerText;
+                }
+                else 
+                {
+                    tempRssData[i, 0] = "";
+                }
+
+                rssNode = rssItems.Item(i).SelectSingleNode("description");
+                if (rssNode != null)
+                {
+                    tempRssData[i, 1] = rssNode.InnerText;
+                }
+                else
+                {
+                    tempRssData[i, 1] = "";
+                }
+
+                rssNode = rssItems.Item(i).SelectSingleNode("link");
+                if (rssNode != null)
+                {
+                    tempRssData[i, 2] = rssNode.InnerText;
+                }
+                else
+                {
+                    tempRssData[i, 2] = "";
+                }
+            }
+            return tempRssData;
+        }
+
+        private void TitlesBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (rssData[TitlesBox.SelectedIndex, 1] != null)
+                DescriptionBox.Text = rssData[TitlesBox.SelectedIndex, 1];
+            if (rssData[TitlesBox.SelectedIndex, 2] != null)
+                linkLabel.Text = "GoTo: " + rssData[TitlesBox.SelectedIndex, 0];
+        }
+
+        private void linkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (rssData[TitlesBox.SelectedIndex, 2] != null)
+                System.Diagnostics.Process.Start(rssData[TitlesBox.SelectedIndex, 2]);
         }
     }
 }

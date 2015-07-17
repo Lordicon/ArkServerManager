@@ -56,6 +56,13 @@
             this.tabPage7 = new System.Windows.Forms.TabPage();
             this.tabPage8 = new System.Windows.Forms.TabPage();
             this.tabPage9 = new System.Windows.Forms.TabPage();
+            this.tabPage10 = new System.Windows.Forms.TabPage();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.DescriptionBox = new System.Windows.Forms.TextBox();
+            this.ChannelTextBox = new System.Windows.Forms.TextBox();
+            this.linkLabel = new System.Windows.Forms.LinkLabel();
+            this.TitlesBox = new System.Windows.Forms.ComboBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -66,11 +73,13 @@
             this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label5 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
-            this.serverstatus = new System.Windows.Forms.PictureBox();
             this.CheckStatus = new System.Windows.Forms.Timer(this.components);
+            this.serverstatus = new System.Windows.Forms.PictureBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            this.tabPage10.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.serverstatus)).BeginInit();
             this.SuspendLayout();
@@ -183,6 +192,7 @@
             this.tabControl1.Controls.Add(this.tabPage7);
             this.tabControl1.Controls.Add(this.tabPage8);
             this.tabControl1.Controls.Add(this.tabPage9);
+            this.tabControl1.Controls.Add(this.tabPage10);
             this.tabControl1.Location = new System.Drawing.Point(12, 27);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -333,6 +343,76 @@
             this.tabPage9.Text = "Player Commands";
             this.tabPage9.UseVisualStyleBackColor = true;
             // 
+            // tabPage10
+            // 
+            this.tabPage10.Controls.Add(this.pictureBox1);
+            this.tabPage10.Controls.Add(this.panel1);
+            this.tabPage10.Controls.Add(this.DescriptionBox);
+            this.tabPage10.Controls.Add(this.ChannelTextBox);
+            this.tabPage10.Controls.Add(this.linkLabel);
+            this.tabPage10.Controls.Add(this.TitlesBox);
+            this.tabPage10.Location = new System.Drawing.Point(4, 22);
+            this.tabPage10.Name = "tabPage10";
+            this.tabPage10.Size = new System.Drawing.Size(880, 421);
+            this.tabPage10.TabIndex = 9;
+            this.tabPage10.Text = "Patch Notes";
+            this.tabPage10.UseVisualStyleBackColor = true;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::Ark_Server_Manager.Properties.Resources.ARKLOGO_klein;
+            this.pictureBox1.Location = new System.Drawing.Point(633, 31);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(160, 148);
+            this.pictureBox1.TabIndex = 6;
+            this.pictureBox1.TabStop = false;
+            // 
+            // panel1
+            // 
+            this.panel1.Location = new System.Drawing.Point(519, 260);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(11, 8);
+            this.panel1.TabIndex = 5;
+            // 
+            // DescriptionBox
+            // 
+            this.DescriptionBox.Location = new System.Drawing.Point(27, 73);
+            this.DescriptionBox.Multiline = true;
+            this.DescriptionBox.Name = "DescriptionBox";
+            this.DescriptionBox.Size = new System.Drawing.Size(504, 290);
+            this.DescriptionBox.TabIndex = 4;
+            // 
+            // ChannelTextBox
+            // 
+            this.ChannelTextBox.Location = new System.Drawing.Point(99, 20);
+            this.ChannelTextBox.Name = "ChannelTextBox";
+            this.ChannelTextBox.ReadOnly = true;
+            this.ChannelTextBox.Size = new System.Drawing.Size(342, 20);
+            this.ChannelTextBox.TabIndex = 3;
+            this.ChannelTextBox.Text = "http://ark.gamepedia.com/api.php?hidebots=1&days=7&limit=50&action=feedrecentchan" +
+    "ges&feedformat=rss";
+            this.ChannelTextBox.Visible = false;
+            // 
+            // linkLabel
+            // 
+            this.linkLabel.AutoSize = true;
+            this.linkLabel.Location = new System.Drawing.Point(27, 366);
+            this.linkLabel.Name = "linkLabel";
+            this.linkLabel.Size = new System.Drawing.Size(40, 13);
+            this.linkLabel.TabIndex = 2;
+            this.linkLabel.TabStop = true;
+            this.linkLabel.Text = "GoTo: ";
+            this.linkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
+            // 
+            // TitlesBox
+            // 
+            this.TitlesBox.FormattingEnabled = true;
+            this.TitlesBox.Location = new System.Drawing.Point(27, 46);
+            this.TitlesBox.Name = "TitlesBox";
+            this.TitlesBox.Size = new System.Drawing.Size(503, 21);
+            this.TitlesBox.TabIndex = 1;
+            this.TitlesBox.SelectedIndexChanged += new System.EventHandler(this.TitlesBox_SelectedIndexChanged);
+            // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -411,6 +491,11 @@
             this.label8.TabIndex = 8;
             this.label8.Text = "Connection -";
             // 
+            // CheckStatus
+            // 
+            this.CheckStatus.Enabled = true;
+            this.CheckStatus.Tick += new System.EventHandler(this.CheckStatus_Tick);
+            // 
             // serverstatus
             // 
             this.serverstatus.BackColor = System.Drawing.Color.Transparent;
@@ -420,11 +505,6 @@
             this.serverstatus.Size = new System.Drawing.Size(24, 29);
             this.serverstatus.TabIndex = 9;
             this.serverstatus.TabStop = false;
-            // 
-            // CheckStatus
-            // 
-            this.CheckStatus.Enabled = true;
-            this.CheckStatus.Tick += new System.EventHandler(this.CheckStatus_Tick);
             // 
             // ArkServerManager
             // 
@@ -448,6 +528,9 @@
             this.tabPage1.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.tabPage10.ResumeLayout(false);
+            this.tabPage10.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.serverstatus)).EndInit();
@@ -496,6 +579,13 @@
         private System.Windows.Forms.Timer CheckStatus;
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.TabPage tabPage10;
+        private System.Windows.Forms.TextBox DescriptionBox;
+        private System.Windows.Forms.TextBox ChannelTextBox;
+        private System.Windows.Forms.LinkLabel linkLabel;
+        private System.Windows.Forms.ComboBox TitlesBox;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
 
